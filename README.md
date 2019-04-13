@@ -1,1 +1,1 @@
-# blazor-ripple
+# Ripple.Net
