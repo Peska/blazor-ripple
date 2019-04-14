@@ -1,0 +1,65 @@
+﻿@page "/ledgers"
+@page "/ledgers/{hash}"
+
+@using Microsoft.AspNetCore.Blazor.Services;
+
+<h1>Ledgers</h1>
+
+<div style="margin: 10px 0">
+    <input type="text" bind="@Hash" />
+    <button class="btn btn-primary" onclick="@CheckLedger">Check Ledger</button>
+</div>
+
+@if (ledger != null)
+{
+    <p>Accepted: @ledger.Accepted</p>
+    <p>AccountHash: @ledger.AccountHash</p>
+}
+
+@if (!string.IsNullOrWhiteSpace(exceptionMessage))
+{
+    <div class="alert alert-danger">
+        <span class="pficon pficon-error-circle-o"></span>
+        <strong>Error</strong>: @exceptionMessage
+    </div>
+}
+
+@functions {
+    [Parameter]
+    private string Hash { get; set; }
+
+    private Ledger ledger;
+    private string exceptionMessage;
+
+    protected override async Task OnInitAsync()
+    {
+        if (!string.IsNullOrWhiteSpace(Hash))
+        {
+            await GetLedgerAsync();
+        }
+    }
+
+    private async Task CheckLedger()
+    {
+        WebAssemblyUriHelper.Instance.NavigateTo($"/ledgers/{Hash}");
+
+        await GetLedgerAsync();
+    }
+
+    private async Task GetLedgerAsync()
+    {
+        ledger = null;
+        exceptionMessage = null;
+
+        Ripple.Net.Ledgers ledgers = new Ripple.Net.Ledgers();
+
+        try
+        {
+            ledger = await ledgers.GetLedgerAsync(Hash);
+        }
+        catch (Exception ex)
+        {
+            exceptionMessage = ex.Message;
+        }
+    }
+}

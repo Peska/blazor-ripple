@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "patternfly@3.59.1",
+      "destination": "wwwroot/css/patternfly/"
+    },
+    {
+      "library": "open-iconic@1.1.1",
+      "destination": "wwwroot/css/open-iconic/",
+      "files": [
+        "font/css/open-iconic-bootstrap.css",
+        "font/css/open-iconic-bootstrap.min.css"
+      ]
+    }
+  ]
+}
