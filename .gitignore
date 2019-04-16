@@ -4,8 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # libman packages
-**/wwwroot/css/open-iconic
-**/wwwroot/css/patternfly
+**/wwwroot/css/twitter-bootstrap
 
 # User-specific files
 *.suo

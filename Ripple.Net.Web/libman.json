@@ -1,18 +1,24 @@
 {
-  "version": "1.0",
-  "defaultProvider": "cdnjs",
-  "libraries": [
-    {
-      "library": "patternfly@3.59.1",
-      "destination": "wwwroot/css/patternfly/"
-    },
-    {
-      "library": "open-iconic@1.1.1",
-      "destination": "wwwroot/css/open-iconic/",
-      "files": [
-        "font/css/open-iconic-bootstrap.css",
-        "font/css/open-iconic-bootstrap.min.css"
-      ]
-    }
-  ]
+	"version": "1.0",
+	"defaultProvider": "cdnjs",
+	"libraries": [
+		{
+			"library": "twitter-bootstrap@4.3.1",
+			"destination": "wwwroot/css/twitter-bootstrap/",
+			"files": [
+				"css/bootstrap-grid.css",
+				"css/bootstrap-grid.css.map",
+				"css/bootstrap-grid.min.css",
+				"css/bootstrap-grid.min.css.map",
+				"css/bootstrap-reboot.css",
+				"css/bootstrap-reboot.css.map",
+				"css/bootstrap-reboot.min.css",
+				"css/bootstrap-reboot.min.css.map",
+				"css/bootstrap.css",
+				"css/bootstrap.css.map",
+				"css/bootstrap.min.css",
+				"css/bootstrap.min.css.map"
+			]
+		}
+	]
 }

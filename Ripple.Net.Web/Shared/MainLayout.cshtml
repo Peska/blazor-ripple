@@ -1,14 +1,20 @@
 @inherits LayoutComponentBase
 
-<div class="top-bar">
-    <a href="">Ripple.Net</a>
-</div>
-
-<div class="content">
-    <div class="sidebar">
-        <NavMenu />
+<nav class="navbar">
+    <div class="container">
+        <div class="row">
+            <a class="navbar-brand" href="">Ripple.Net</a>
+        </div>
     </div>
-    <div class="main">
-        @Body
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-auto left-menu">
+            <NavMenu />
+        </div>
+        <div class="col content">
+            @Body
+        </div>
     </div>
 </div>

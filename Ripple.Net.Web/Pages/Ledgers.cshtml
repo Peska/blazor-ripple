@@ -5,9 +5,11 @@
 
 <h1>Ledgers</h1>
 
-<div style="margin: 10px 0">
-    <input type="text" bind="@Hash" />
-    <button class="btn btn-primary" onclick="@CheckLedger">Check Ledger</button>
+<div class="input-group mb-3">
+    <input bind=@Hash type="text" class="form-control" placeholder="Ledger hash" aria-label="Ledger hash" aria-describedby="button-addon2" />
+    <div class="input-group-append">
+        <button class="btn btn-outline-primary" onclick="@GetLedgerAsync">Check Ledger</button>
+    </div>
 </div>
 
 @if (ledger != null)
@@ -16,11 +18,24 @@
     <p>AccountHash: @ledger.AccountHash</p>
 }
 
-@if (!string.IsNullOrWhiteSpace(exceptionMessage))
+@if (showLoading)
 {
-    <div class="alert alert-danger">
-        <span class="pficon pficon-error-circle-o"></span>
-        <strong>Error</strong>: @exceptionMessage
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <div class="callout callout-danger">
+        <h4>Error</h4>@errorMessage
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(infoMessage))
+{
+    <div class="callout callout-info">
+        <h4>Information</h4>@infoMessage
     </div>
 }
 
@@ -29,37 +44,70 @@
     private string Hash { get; set; }
 
     private Ledger ledger;
-    private string exceptionMessage;
+    private string errorMessage;
+    private string infoMessage;
+    private bool showLoading;
 
     protected override async Task OnInitAsync()
     {
+        WebAssemblyUriHelper.Instance.OnLocationChanged += OnLocationChanged;
+
         if (!string.IsNullOrWhiteSpace(Hash))
         {
             await GetLedgerAsync();
         }
     }
 
-    private async Task CheckLedger()
+    public void Dispose()
     {
-        WebAssemblyUriHelper.Instance.NavigateTo($"/ledgers/{Hash}");
+        WebAssemblyUriHelper.Instance.OnLocationChanged += OnLocationChanged;
+    }
 
-        await GetLedgerAsync();
+    private void OnLocationChanged(object sender, string location)
+    {
+        if (!string.IsNullOrWhiteSpace(Hash) && location?.IndexOf(Hash) < 0)
+        {
+            Hash = null;
+            ledger = null;
+            errorMessage = null;
+            infoMessage = null;
+            showLoading = false;
+
+            // Nie wiem dlaczego, ale z jakiegoś powodu nie odświeża się ux bez tej metody
+            // mimo, że powinien. Może w następnej wersji to naprawią.
+            StateHasChanged();
+        }
     }
 
     private async Task GetLedgerAsync()
     {
         ledger = null;
-        exceptionMessage = null;
+        errorMessage = null;
+        infoMessage = null;
 
-        Ripple.Net.Ledgers ledgers = new Ripple.Net.Ledgers();
-
-        try
+        if (string.IsNullOrWhiteSpace(Hash))
         {
-            ledger = await ledgers.GetLedgerAsync(Hash);
+            infoMessage = "Ledger hash is required";
+            await Task.CompletedTask;
         }
-        catch (Exception ex)
+        else
         {
-            exceptionMessage = ex.Message;
+            showLoading = true;
+
+            Ripple.Net.Ledgers ledgers = new Ripple.Net.Ledgers();
+
+            try
+            {
+                ledger = await ledgers.GetLedgerAsync(Hash);
+            }
+            catch (Exception ex)
+            {
+                errorMessage = ex.Message;
+            }
+            finally
+            {
+                showLoading = false;
+            }
         }
     }
 }
