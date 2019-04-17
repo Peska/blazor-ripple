@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Ripple.Net
 {
@@ -9,5 +10,8 @@ namespace Ripple.Net
 
         [JsonProperty("account_hash")]
         public string AccountHash { get; set; }
+
+        [JsonProperty("transactions")]
+        public IEnumerable<Transaction> Transactions { get; set; }
     }
 }
