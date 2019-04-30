@@ -8,7 +8,7 @@
 <div class="input-group mb-3">
     <input bind=@Hash type="text" class="form-control" placeholder="Ledger hash" aria-label="Ledger hash" aria-describedby="button-addon2" />
     <div class="input-group-append">
-        <button class="btn btn-outline-primary" onclick="@GetLedgerAsync">Check Ledger</button>
+        <button class="btn btn-outline-primary" onclick="@CheckLedgerAsync">Check Ledger</button>
     </div>
 </div>
 
@@ -113,6 +113,13 @@
             // mimo, że powinien. Może w następnej wersji to naprawią.
             StateHasChanged();
         }
+    }
+
+    private async Task CheckLedgerAsync()
+    {
+        WebAssemblyUriHelper.Instance.NavigateTo($"/ledgers/{Hash}");
+
+        await GetLedgerAsync();
     }
 
     private async Task GetLedgerAsync()
